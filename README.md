@@ -139,9 +139,15 @@ ProxyPassReverse / http://localhost:5000/
 
 In that case I configure the proxy server to lissen to IP port 5000, the standard port used by Blazor.
 If you configure two apps running side by side, assign to the second app another IP port (e.g. 6000): replace 5000 with 6000.
-With this only addition, the Blazor app runs. But it is not able to start the SignalR websocket and fall back to the default long polling (communication client/server is done via HTTP).
 
-This is a part I am not really sure 
+To support Apache proxy capability you should activate Apache proxy modules.
+Open PuTTY and connect to the server
+```
+a2enmod   proxy
+a2enmod   proxy_wstunnel
+```
+
+With these settings, Blazor app works. But it is not able to start the SignalR websocket and fall back to the default long polling (communication client/server is done via HTTP).
 
 To open the websocket, the nginx engine must be configured to connect the blazor app.
 
@@ -202,9 +208,35 @@ Copy all files from local to remote.
 
 ## Create the service
 
+The server is setup to forward requests made to http://<serveraddress>:80 on to the ASP.NET Core app running on Kestrel at http://127.0.0.1:5000. However, Nginx isn’t set up to manage the Kestrel process. systemd can be used to create a service file to start and monitor the underlying web app. systemd is an init system that provides many powerful features for starting, stopping, and managing processes.
 
 
+Create the service definition file in the shell:
+```
+sudo nano /etc/systemd/system/kestrel-admin-dulioca.service
+```
+The following is an example service file for the app:
+```
+[Unit]Description=Example bla bla bla running on Ubuntu
+[Service]
+WorkingDirectory=/var/www/vhosts/(domain directory)
+ExecStart=/usr/share/dotnet/dotnet /var/www/vhosts/(domain directory)/(Blazor app).dll
+Restart=always
+# Restart service after 10 seconds if the dotnet service crashes:
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=dotnet-example
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+[Install]
+WantedBy=multi-user.target
+```
 
+The domain directory is "(main domain)/httpdocs" or "(main domain)/(sub domain)"
+The "Blazor app dll" is indeed the dll generated publishing the project.
+
+If a second appa is running, you can redirect the B
 ## Install PostgreSQL
 
 
