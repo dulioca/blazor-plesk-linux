@@ -119,7 +119,7 @@ In Plesk there is a specific page for the Apache & nginx Settings, but it is a t
 
 [Apache and Nginx Configuration Files](https://docs.plesk.com/en-US/obsidian/administrator-guide/server-web/server-web-apache-e-nginx-linux/file-di-configurazione-apache-e-nginx.68678/)
 
-The piece of setting you provide will glued inside this network of conf files.
+The pieces of setting you provide are glued inside this network of conf files.
 
 In Plesk:
 - select the domains page
@@ -140,6 +140,9 @@ ProxyPassReverse / http://localhost:5000/
 In that case I configure the proxy server to lissen to IP port 5000, the standard port used by Blazor.
 If you configure two apps running side by side, assign to the second app another IP port (e.g. 6000): replace 5000 with 6000.
 With this only addition, the Blazor app runs. But it is not able to start the SignalR websocket and fall back to the default long polling (communication client/server is done via HTTP).
+
+This is a part I am not really sure 
+
 To open the websocket, the nginx engine must be configured to connect the blazor app.
 
 - go to Additional nginx directives
@@ -165,6 +168,37 @@ Also here, the 5000 is the standard IP port. If you need others app running, use
 
 ## Publishing the Blazor project
 
+To build my Blazor project I sue Visual Studio 2019.
+- select "Publish ...." in the "Build" menu
+- add a new profile
+- untime destination is "linux-x64"
+- destination is a folder (e.g. "bin\Release\net5.0\publish\")
+- select "publish"
+
+I chosed FileZilla as a tool to copy the code in the virtual server. A FTP server is already configured at the virtual server for you.
+The configuration is:
+- protocol "SFTP - SSH..."
+- host is the virtual server IP
+- user is "root"
+- password is the same password
+
+The local folder could be
+
+```
+D:\sviluppo\(your project folders)\bin\Release\net5.0\publish\
+```
+
+The remote folder is
+
+```
+/var/www/vhosts/(main domain)/(sub domain)
+```
+or
+```
+/var/www/vhosts/(main domain)/httpdocs
+```
+
+Copy all files from local to remote.
 
 ## Create the service
 
