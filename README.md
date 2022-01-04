@@ -63,22 +63,72 @@ In Plesk:
 .
 
 
-## Intalling Dotnet Core
+## Installing Dotnet Core
 
 
 
 
+And now I should follow the direction in the Microsoft document
 
-## Configure Apache
+[Host and deply Blazor Server](https://docs.microsoft.com/en-us/aspnet/core/blazor/host-and-deploy/server?view=aspnetcore-5.0)
+
+But I have to take the specific condition of the web server in Plesk.
+
+## Configure Apache and nginx
+
+First of all, you must know that Plesk sports a web server teaming up nginx and Apache.
+The client interacts with nginx and nginx interacts with Apache.
+
+[Apache with nginx](https://docs.plesk.com/en-US/obsidian/administrator-guide/web-servers/apache-and-nginx-web-servers-linux/apache-with-nginx.70837/)
+
+Both Apache and nginx have to be configured.
+In Plesk there is a specific page for the Apache & nginx Settings, but it is a tricky condition because both Apache and nginx have a complex set of conf files, including each other.
+
+[Apache and Nginx Configuration Files](https://docs.plesk.com/en-US/obsidian/administrator-guide/server-web/server-web-apache-e-nginx-linux/file-di-configurazione-apache-e-nginx.68678/)
+
+The piece of setting you provide will glued inside this network of conf files.
+
+In Plesk:
+- select the domains page
+- select the "Hosting & DNS" tag
+- select "Apache & nginx Settings"
+- go to "Additional Apache directives" section
+- add to the "Additional directives for HTTPS"
 
 
+```
+ProxyRequests		On
+ProxyPreserveHost	On
 
+ProxyPass	 / http://localhost:5000/
+ProxyPassReverse / http://localhost:5000/
+```
 
+In that case I configure the proxy server to lissen to IP port 5000, the standard port used by Blazor.
+If you configure two apps running side by side, assign to the second app another IP port (e.g. 6000): replace 5000 with 6000.
+With this only addition, the Blazor app runs. But it is not able to start the SignalR websocket and fall back to the default long polling (communication client/server is done via HTTP).
+To open the websocket, the nginx engine must be configured to connect the blazor app.
 
+- go to Additional nginx directives
+- add to the "Additional nginx directives"
 
-## Configure nginx
+```
+location ~ /
+{
+	proxy_pass             http://127.0.0.1:5000;
+	proxy_read_timeout     60;
+	proxy_connect_timeout  60;
+	proxy_redirect         off;
 
+	proxy_http_version 1.1;
+	proxy_set_header Upgrade $http_upgrade;
+	proxy_set_header Connection 'upgrade';
+	proxy_set_header Host $host;
+	proxy_cache_bypass $http_upgrade;
+}
+```
 
+Also here, the 5000 is the standard IP port. If you need others app running, use other IP port.
 
 
 ## Create the service
