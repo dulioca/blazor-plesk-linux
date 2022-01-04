@@ -65,14 +65,47 @@ In Plesk:
 
 ## Installing Dotnet Core
 
+From that moment you shoul connect the shell of the server.
+I installed PuTTY in my PC, a well known free SSH client for windows.
+- launch PuTTY
+- type the virtual server IP inside "Host Name" field
+- select OPEN
 
+A terminal window opens
+- type "root"
+- type the password
 
+You do not need to know many linux commands by heart, just only *ls* (and *ls -l*) to list files and *cd* to change directory.
 
-And now I should follow the direction in the Microsoft document
+[Install the .NET SDK or the .NET Runtime on Ubuntu](https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu)
+[How to Install Dotnet Core on Ubuntu 20.04](https://tecadmin.net/how-to-install-net-core-on-ubuntu-20-04/)
+
+First of all, enable Microsoft packages repository on your Ubuntu system. 
+
+```
+wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb 
+sudo dpkg -i packages-microsoft-prod.deb 
+```
+
+If you are going to create a application or making changes to existing application, you will required .net core sdk package on your system.
+
+```
+sudo apt update 
+sudo apt install apt-transport-https 
+sudo apt install dotnet-sdk-3.1 
+sudo apt install dotnet-sdk-5.0 
+```
+
+You can use dotnet command line utility to check installed version of .NET Core on your system. To check dotnet version, type:
+```
+dotnet --version
+```
+
+To deply Blazor in linux, you should follow the direction in the Microsoft document
 
 [Host and deply Blazor Server](https://docs.microsoft.com/en-us/aspnet/core/blazor/host-and-deploy/server?view=aspnetcore-5.0)
 
-But I have to take the specific condition of the web server in Plesk.
+But you have to take consider the specific condition of the web server in Plesk.
 
 ## Configure Apache and nginx
 
@@ -129,6 +162,8 @@ location ~ /
 ```
 
 Also here, the 5000 is the standard IP port. If you need others app running, use other IP port.
+
+## Publishing the Blazor project
 
 
 ## Create the service
