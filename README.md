@@ -3,11 +3,10 @@ My installation humble notes of a **Blazor server app** in a **linux** virtual s
 
 
 Disclaimers:
-- I am not a professional programmer
-- I have limited knowledge of linux
-- Some of the test had the Italian interface and my translation could be not correct
+- I am not a professional IT
+- Some of the test had a not-English interface and my translation could be not correct
 - Text contains language mistakes a lot....
-- The provider I selected is Ionox by 1&1 but other provider could offer similar interfaces
+- The provider I selected is Ionox by 1&1
 
 ## From the beggining
 
