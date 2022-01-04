@@ -1,6 +1,6 @@
 # blazor-plesk-linux
-My humble notes about installin **Blazor server** in a **linux** virtual server with **Plesk**. 
-Also PostgreSQL server installation 
+My installation humble notes of a **Blazor server app** in a **linux** virtual server with **Plesk**. 
+
 
 Disclaimers:
 - I am not a professional programmer
