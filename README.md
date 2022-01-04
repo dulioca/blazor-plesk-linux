@@ -1,5 +1,6 @@
 # blazor-plesk-linux
-My humble notes about installin Blazor server in a linux virtual server with Plesk
+My humble notes about installin **Blazor server** in a **linux** virtual server with **Plesk**. 
+Also PostgreSQL server installation 
 
 Disclaimers:
 - I am not a professional programmer
@@ -28,6 +29,67 @@ a list of linux distrubution are available, I selected Ubuntu 20.04
 The provider offers me a section of "Domains and SSL" were I can get a free SSL certificate. Once generated the certificates have to be dowload locally.
 There is a SSL certificate, a file .PFX and intermediate certificate.
 It is time to login in Plesk: 
-'''
-https://(IP address)/login_up.php
-'''
+```
+https://(server IP address)/login_up.php
+```
+- select the domain
+- select "SSL/TLS Certificates"
+- select "Dowload or remove existing ceriticates"
+- select "Add SSL/TLS certificate"
+- provide a name for your certificate
+- at "Private key (\*.key)" select the file "xxxx.key" previously downloaded
+- at "Certificate (\*crt)" select the file "xxxx.cer" previously downloaded
+- at "CA certificate (\*-ca.crt)" select the file "xxxxINTERMEDIATE.cer" previously downloaded
+- select "Upload Certificate"
+
+At hosting settins for XXXXX.com, at "Security" section
+- select "SSL/TLS support"
+- select Permanent SEO..."
+- select at "Certificate" the certificate you have just created/uploaded
+
+When you create a subdomain, assign it the same certificate you assigned to the main domain
+
+## Subdomain
+
+In the provider cloud panel:
+
+.
+.
+.
+
+In Plesk:
+.
+.
+.
+
+
+## Intalling Dotnet Core
+
+
+
+
+
+## Configure Apache
+
+
+
+
+
+
+## Configure nginx
+
+
+
+
+## Create the service
+
+
+
+
+## Install PostgreSQL
+
+
+
+
+
+
