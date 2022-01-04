@@ -4,8 +4,9 @@ Also PostgreSQL server installation
 
 Disclaimers:
 - I am not a professional programmer
+- I have limited knowledge of linux
 - Some of the test had the Italian interface and my translation could be not correct
-- All the text contains languade mistakes a lot....
+- Text contains language mistakes a lot....
 - The provider I selected is Ionox by 1&1 but other provider could offer similar interfaces
 
 ## From the beggining
@@ -53,20 +54,18 @@ When you create a subdomain, assign it the same certificate you assigned to the 
 
 In the provider cloud panel:
 
-.
-.
-.
+***I will add later***
 
 In Plesk:
-.
-.
-.
+
+***I will add later***
+
 
 
 ## Installing Dotnet Core
 
-From that moment you shoul connect the shell of the server.
-I installed PuTTY in my PC, a well known free SSH client for windows.
+To access to the shell of the virtual server, I installed PuTTY in my PC, a well known free SSH client for windows.
+When ready:
 - launch PuTTY
 - type the virtual server IP inside "Host Name" field
 - select OPEN
@@ -105,7 +104,7 @@ To deply Blazor in linux, you should follow the direction in the Microsoft docum
 
 [Host and deply Blazor Server](https://docs.microsoft.com/en-us/aspnet/core/blazor/host-and-deploy/server?view=aspnetcore-5.0)
 
-But you have to take consider the specific condition of the web server in Plesk.
+But you have to consider the specific condition of the web server in Plesk.
 
 ## Configure Apache and nginx
 
@@ -150,7 +149,7 @@ a2enmod   proxy_wstunnel
 With these settings, Blazor app works. But it is not able to start the SignalR websocket and fall back to the default long polling (communication client/server is done via HTTP).
 
 To open the websocket, the nginx engine must be configured to connect the blazor app.
-
+The same setting page in Plesk:
 - go to Additional nginx directives
 - add to the "Additional nginx directives"
 
@@ -174,10 +173,10 @@ Also here, the 5000 is the standard IP port. If you need others app running, use
 
 ## Publishing the Blazor project
 
-To build my Blazor project I sue Visual Studio 2019.
+To build my Blazor project I am using Visual Studio 2019.
 - select "Publish ...." in the "Build" menu
 - add a new profile
-- untime destination is "linux-x64"
+- runtime destination is "linux-x64"
 - destination is a folder (e.g. "bin\Release\net5.0\publish\")
 - select "publish"
 
@@ -197,11 +196,11 @@ D:\sviluppo\(your project folders)\bin\Release\net5.0\publish\
 The remote folder is
 
 ```
-/var/www/vhosts/(main domain)/(sub domain)
+/var/www/vhosts/example.com/blog.example.com
 ```
 or
 ```
-/var/www/vhosts/(main domain)/httpdocs
+/var/www/vhosts/example.com/httpdocs
 ```
 
 Copy all files from local to remote.
@@ -213,7 +212,7 @@ The server is setup to forward requests made to http://<serveraddress>:80 on to 
 
 Create the service definition file in the shell:
 ```
-sudo nano /etc/systemd/system/kestrel-admin-dulioca.service
+sudo nano /etc/systemd/system/kestrel-example.service
 ```
 The following is an example service file for the app:
 ```
@@ -233,13 +232,43 @@ Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 WantedBy=multi-user.target
 ```
 
-The domain directory is "(main domain)/httpdocs" or "(main domain)/(sub domain)"
+The domain directory is "(main domain)/httpdocs" or "(main domain)/(sub domain)".
+E.g. "example.com/httpdocs" and "example.com/blog.example.com"
 The "Blazor app dll" is indeed the dll generated publishing the project.
 
-If a second appa is running, you can redirect the B
+As default, kestrel is lissening to port 5000.
+	
+If a second app is running, connected to a subdomain, you can redirect the kestrel service to another IP port (e.g 6000), adding the following line
+	
+```	
+Environment=ASPNETCORE_URLS="http://127.0.0.1:6000"
+```	
+
+Validate the script
+	
+```
+sudo systemd-analyze verify kestrel-example.service
+```
+Save the file and enable the service.
+
+```
+sudo systemctl enable kestrel-example.service
+```
+	
+Start the service and verify that it’s running.
+```
+sudo systemctl start kestrel-example.service 
+sudo systemctl status kestrel-example.service
+```
+
+If you change the script
+```
+sudo systemctl daemon-reload	
+```
+	
 ## Install PostgreSQL
 
-
+***I will add later***
 
 
 
