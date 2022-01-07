@@ -165,10 +165,15 @@ location ~ /
 	proxy_set_header Connection 'upgrade';
 	proxy_set_header Host $host;
 	proxy_cache_bypass $http_upgrade;
+	
+	proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
 }
 ```
 
 Also here, the 5000 is the standard IP port. If you need others app running, use other IP port.
+
+The "X-Forwarded-xxxx" items are required to connect to an external authentication server (see Auth0 chapter)
 
 ## Publishing the Blazor project
 
@@ -269,6 +274,6 @@ sudo systemctl daemon-reload
 
 ***I will add later***
 
-
+## Use Auth0 to authenticate
 
 
