@@ -265,10 +265,22 @@ sudo systemctl start kestrel-example.service
 sudo systemctl status kestrel-example.service
 ```
 
+A larger view of the service status
+```
+journalctl -u  kestrel-example.service -e
+```
+	
 If you change the script
 ```
 sudo systemctl daemon-reload	
 ```
+	
+If you publish updated codes, I fill confortable with
+```
+systemctl stop kestrel-example.service
+systemctl start kestrel-example.service
+```
+	
 	
 ## Install PostgreSQL
 
